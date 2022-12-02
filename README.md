@@ -216,7 +216,7 @@ select * from product_type;
 
 ## 五、Servlet实现
 
-### 2、ErrorTips
+### 1、ErrorTips
 
 ```java
 /**
@@ -284,7 +284,7 @@ public class ResponseData {
 
 ```java
 /**
- * 分页
+ * 分页 - layui - 动态表格 - 分页
  *
  */
 public class PageVo extends ResponseData {
