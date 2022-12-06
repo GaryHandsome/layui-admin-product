@@ -31,8 +31,8 @@
 	<!-- 操作工具条件开始 -->
 	<script type="text/html" id="toolbarDemo">
 		<div class="layui-btn-container">
-			<button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
-			<button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
+			<button class="layui-btn layui-btn-warm layui-btn-xs" lay-event="delete">删除</button>
+			<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="update">编辑</button>
 		</div>
 	</script>
 	<!-- 操作工具条件结束 -->
@@ -52,15 +52,15 @@
 			table.render({
 				elem: '#table_data'
 				,url:'queryAll.do'
-				,page: true 	// 开启分页
-				,limit:5
-				,limits:[5,10]
+				// ,page: true 	// 开启分页
+				// ,limit:5
+				// ,limits:[5,10]
 				,cols:[[
 					// {field: '实体对象的属性名称', title: '列头显示内容', width:宽, sort: 是否排序, fixed: '定位'}
 					{field: 'productId', title: '商品编号', width:120, fixed: 'left'}
-					,{field: 'productName', title: '商品名称', width:120, fixed: 'left'}
+					,{field: 'productName', title: '商品名称', width:340, fixed: 'left'}
 					,{field: 'productPrice', title: '商品价格', width:120, fixed: 'left', sort:true}
-					,{field: 'productDate', title: '上货日期', width:'20%', fixed: 'left',templet:function(row) {
+					,{field: 'productDate', title: '上货日期', width:130, fixed: 'left',templet:function(row) {
 						let date = new Date(row.productDate);
 						console.log(date);
 						let year = date.getFullYear();
@@ -73,7 +73,7 @@
 
 						return year + "-" + month + "-" + day ;
 					}}
-					,{field: 'productStatus', title: '商品状态', width:'20%', fixed: 'left',templet:function(row){
+					,{field: 'productStatus', title: '商品状态', width:120, fixed: 'left',templet:function(row){
 						// console.log(row)
 						if(row.productStatus==1) {
 							return '上架';
@@ -81,7 +81,7 @@
 							return '下架'
 						}
 					}}
-					,{title: '操作', width:120, fixed: 'left',toolbar:'#toolbarDemo'}
+					,{title: '操作', width:'100%', fixed: 'left',toolbar:'#toolbarDemo'}
 				]]
 				// 把后台数据转换为layui中table组件所要求的数据格式
 				,parseData:function( res ) {
