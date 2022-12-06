@@ -16,6 +16,6 @@ public class RemoveProductServlet extends BaseServlet{
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 删除商品....
         System.out.println("根据商品名称删除");
-        System.out.println("delete success");
+        System.out.println("删除成功");
     }
 }
