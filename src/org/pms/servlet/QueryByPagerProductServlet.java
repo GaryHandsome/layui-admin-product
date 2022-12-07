@@ -23,8 +23,8 @@ public class QueryByPagerProductServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 获取客户端浏览器请示过来的参数
-        String productName = req.getParameter("product_name");
-        String productType = req.getParameter("product_Type");
+        String productName = req.getParameter("name");
+        String productType = req.getParameter("type");
         Product product = new Product();
         product.setProductName(productName);
         product.setProductType(productType);

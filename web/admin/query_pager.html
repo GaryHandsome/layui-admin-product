@@ -11,16 +11,22 @@
 <body>
 
 	<!-- 搜索表单开始 -->
-	<form class="layui-form" action="product_query.do" method="post">
+	<form class="layui-form">
 		<div class="layui-inline">
 			<label class="layui-form-label">查询条件</label>
 			<div class="layui-input-block">
-			  <input type="text" name="cond" style="width: 400px;"  placeholder="请输入条件" autocomplete="off" class="layui-input">
+			  <input type="text" id="name" name="name" style="width: 400px;"  placeholder="请输入商品名称" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 
 		<div class="layui-inline">
-			<input type="submit" id="selectBtn" class="layui-btn" data-type="reload" value="查询">
+			<select name="type" id="type" lay-filter="type" lay-search="">
+				<option value="">商品类型</option>
+			</select>
+		</div>
+
+		<div class="layui-inline">
+			<input type="button" id="selectBtn" class="layui-btn" data-type="reload" value="查询">
 		</div>
 		<div class="layui-inline">
 			<input type="button" id="addBtn" class="layui-btn" data-type="reload" value="添加">
@@ -43,12 +49,33 @@
 
 	<!-- 第二：使用插件方法 -->
 	<script>
-		// 加载 table 模块
-		layui.use('table',function(){
+		// 加载 layui 的相关模块
+		layui.use(['jquery', 'table', 'layer', 'form'],function(){
 			// 实例化动态表格的实例对象
+			let $ = layui.jquery;
 			let table = layui.table;
+			let layer = layui.layer;
+			let form = layui.form;
 
-			// 定义动态表格相关的参数
+			// 使用jquery，实现向服务发起 ajax 异步请求
+			$.ajax({
+				url: 'QueryProductTypeServlet',
+				type: 'get',
+				success: function (res) {
+					if (res.code == 200) {
+						$.each(res.data, function (index, obj) {
+							$('#type').append('<option value="'
+									+ obj.typeName + '">' + obj.typeName + '</option>');
+
+						});
+
+						// 重新渲染表单
+						form.render('select');
+					}
+				}
+			});
+
+			// 定义动态表格相关的参数 - 页面加载时，把后台数据显示在table组件中
 			table.render({
 				elem: '#table_data' 		// 绑定表格节点
 				,url:'queryByPager.do'		// 指定服务器程序的地址
@@ -93,6 +120,42 @@
 				,limit:5				// 每页显示5条记录
 				,limits:[5,10,15,20] 	// 根据需要，用户可以动态指定每页显示的记录数
 			});
+
+
+		// 实现条件查询
+		let active = {
+			reload: function () {
+				// 重载加载表格
+				table.reload('table_data', {
+					page: {
+						curr: 1 // 重新从第 1 页开始
+					}
+					, where: {
+						name: $('#name').val(),
+						type: $('#type').val()
+					}
+				});
+			}
+		};
+
+		// 绑定查询按钮
+		$('#selectBtn').on('click', function () {
+			// type='reload'
+			// let type = $(this).data('type');
+			// active[type] ? active[type].call(this) : '';
+
+			// 重载加载表格
+			table.reload('table_data', {
+				page: {
+					curr: 1 // 重新从第 1 页开始
+				}
+				, where: {
+					name: $('#name').val(),
+					type: $('#type').val()
+				}
+			});
+		});
+
 		}) ;
 	</script>
 </body>

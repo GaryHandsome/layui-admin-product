@@ -7,8 +7,17 @@ package org.pms.entity;
  * @Author zqx
  */
 public class ProductType {
+    /**
+     * 类型编号
+     */
     private int typeId ;
+    /**
+     * 类型名称
+     */
     private String typeName ;
+    /**
+     * 上一级类型编号
+     */
     private int parentId ;
 
     public int getTypeId() {
