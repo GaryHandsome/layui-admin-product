@@ -1,8 +1,11 @@
 package org.pms.test;
 
 import org.pms.dao.ProductDao;
+import org.pms.dao.ProductTypeDao;
 import org.pms.dao.impl.ProductDaoImpl;
+import org.pms.dao.impl.ProductTypeDaoImpl;
 import org.pms.entity.Product;
+import org.pms.entity.ProductType;
 
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,13 @@ import java.util.List;
  */
 public class ProductDaoTest {
     public static void main(String[] args) {
+        ProductTypeDao productDao = new ProductTypeDaoImpl() ;
+        for (ProductType pt : productDao.selectAll()) {
+            System.out.println(pt.getTypeName());
+        }
+    }
+
+    private static void selectByPager() {
         // 实例化商品接口对象
         ProductDao productDao = new ProductDaoImpl();
 
