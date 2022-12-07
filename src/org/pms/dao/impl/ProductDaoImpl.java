@@ -2,7 +2,7 @@ package org.pms.dao.impl;
 
 import org.pms.dao.ProductDao;
 import org.pms.entity.Product;
-import org.pms.util.DbUtil;
+import org.pms.util.DbUtil4MsSql;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "insert into product(product_id,product_name,product_type,product_price,product_count,product_image,product_date,product_desc,product_sale,product_status) values (?,?,?,?,?,?,?,?,?,?)";
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
 
         try {
@@ -49,7 +49,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, null);
+            DbUtil4MsSql.close(conn, pstmt, null);
         }
         return r;
     }
@@ -61,7 +61,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "delete from product where product_id=?";
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
 
         try {
@@ -79,7 +79,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, null);
+            DbUtil4MsSql.close(conn, pstmt, null);
         }
         return r;
     }
@@ -91,7 +91,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "update product set product_name=?,product_type=?,product_price=?,product_status=?,product_desc=? where product_id=?";
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
 
         try {
@@ -114,7 +114,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, null);
+            DbUtil4MsSql.close(conn, pstmt, null);
         }
         return r;
     }
@@ -126,7 +126,7 @@ public class ProductDaoImpl implements ProductDao {
         String sql = "select product_id,product_name,product_price,product_count,product_image,product_date,product_desc,product_sale,product_status from product";
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rst = null;
 
@@ -173,7 +173,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, rst);
+            DbUtil4MsSql.close(conn, pstmt, rst);
         }
         return list;
     }
@@ -183,11 +183,11 @@ public class ProductDaoImpl implements ProductDao {
         List<Product> list = new ArrayList<>();
 
         // 第一：定义要操作数据库的SQL语句 - 动态多条件查询
-        StringBuilder sql = new StringBuilder("select product_id,product_name,product_type,product_price,product_count,product_image,product_date,product_desc,product_sale,product_status,row_umber from ( ");
+        StringBuilder sql = new StringBuilder("select product_id,product_name,product_type,product_price,product_count,product_image,product_date,product_desc,product_sale,product_status,row_number from ( ");
         sql.append("select product_id,product_name,product_type,product_price,product_count,product_image,product_date,product_desc,product_sale,product_status, row_number() over(order by t1.product_id asc) as row_number");
         sql.append(" from product as t1 where 1=1");
 
-        // 1.定义集合，用于存储SQL语句的参数值
+        // 1.定义集合，用于存储SQL语句的？占位符的参数值
         List<Object> params = new ArrayList<Object>();
 
         // 2.拼接SQL语句
@@ -211,7 +211,7 @@ public class ProductDaoImpl implements ProductDao {
         params.add(page * limit);
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rst = null;
 
@@ -221,7 +221,7 @@ public class ProductDaoImpl implements ProductDao {
 
             // 第四：填充占位符中的数据
             for (int i = 0; i < params.size(); i++) {
-                pstmt.setObject(i,params.get(i));
+                pstmt.setObject(i+1,params.get(i));
             }
 
             // 第五：执行SQL语句
@@ -263,13 +263,13 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, rst);
+            DbUtil4MsSql.close(conn, pstmt, rst);
         }
         return list;
     }
 
     @Override
-    public Long selectByPageCount(Product product, Integer page, Integer limit) {
+    public Long selectByPageCount(Product product) {
         Long count = 0L ;
 
         // 第一：定义要操作数据库的SQL语句 - 动态多条件查询
@@ -292,7 +292,7 @@ public class ProductDaoImpl implements ProductDao {
         }
 
         // 第二：获取连接对象
-        Connection conn = DbUtil.getConnection();
+        Connection conn = DbUtil4MsSql.getConnection();
         PreparedStatement pstmt = null;
         ResultSet rst = null;
 
@@ -302,7 +302,7 @@ public class ProductDaoImpl implements ProductDao {
 
             // 第四：填充占位符中的数据
             for (int i = 0; i < params.size(); i++) {
-                pstmt.setObject(i,params.get(i));
+                pstmt.setObject(i+1,params.get(i));
             }
 
             // 第五：执行SQL语句
@@ -316,7 +316,7 @@ public class ProductDaoImpl implements ProductDao {
             throw new RuntimeException(e);
         } finally {
             // 第七：关闭相关的对象
-            DbUtil.close(conn, pstmt, rst);
+            DbUtil4MsSql.close(conn, pstmt, rst);
         }
         return count;
     }

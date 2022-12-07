@@ -16,7 +16,7 @@ public class DbUtil4MsSql {
     /**
      * 连接URL
      */
-    private static final String URL = "jdbc:jtds:sqlserver://localhost:1433;DatabaseName=shop";
+    private static final String URL = "jdbc:jtds:sqlserver://localhost:1433;DatabaseName=layui_admin";
     /**
      * 帐号
      */
@@ -73,7 +73,7 @@ public class DbUtil4MsSql {
      * @param stmt 父类对象可以接收子类对象 - 多态
      * @param conn
      */
-    public static void close(ResultSet rst, Statement stmt, Connection conn) {
+    public static void close(Connection conn,Statement stmt,ResultSet rst) {
         if (rst != null) {
             try {
                 rst.close();

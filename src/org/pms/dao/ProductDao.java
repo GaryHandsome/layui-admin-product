@@ -43,9 +43,9 @@ public interface ProductDao {
     List<Product> selectAll();
 
     /**
-     * 条件分页查询
+     * 动态条件 + 分页查询
      *
-     * @param product
+     * @param product 查询条件（商品名称、商品类型）
      * @param page 当前页
      * @param limit 每页显示记录数
      * @return
@@ -53,12 +53,10 @@ public interface ProductDao {
     List<Product> selectByPage(Product product, Integer page, Integer limit);
 
     /**
-     * 条件分页查询总记录数
+     * 动态条件 + 分页查询 - 总记录数
      *
      * @param product
-     * @param page 当前页
-     * @param limit 每页显示记录数
      * @return
      */
-    Long selectByPageCount(Product product, Integer page, Integer limit);
+    Long selectByPageCount(Product product);
 }
