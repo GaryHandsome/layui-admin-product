@@ -43,6 +43,125 @@
 	</script>
 	<!-- 操作工具条件结束 -->
 
+	<!-- 添加表单开始 -->
+	<div id="addContainer" style="display: none">
+		<form class="layui-form" id="addForm" lay-filter="example" style="margin: 1rem">
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品编号</label>
+				<div class="layui-input-block">
+					<input type="text" id="add-productId" name="productId"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品名称</label>
+				<div class="layui-input-block">
+					<input type="text" id="add-productName" name="productName"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品类型</label>
+				<div class="layui-input-block">
+					<select name="productType" id="add-type" lay-filter="type" lay-search="">
+						<option value="">请选择类型</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品价格</label>
+				<div class="layui-input-block">
+					<input type="text" id="add-productPrice" name="productPrice"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">状态</label>
+				<div class="layui-input-block">
+					<input type="radio" id="add-productStatus1" name="productStatus"
+						   value="1" title="上架" checked>
+					<input type="radio" id="add-productStatus2" name="productStatus"
+						   value="0" title="下架">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">描述</label>
+				<div class="layui-input-block">
+        		<textarea id="add-productDesc" name="productDesc"
+				  placeholder="请输入内容" class="layui-textarea">
+				</textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 添加表单结束 -->
+
+	<!-- 修改表单开始 -->
+	<div id="updateContainer" style="display: none">
+		<form class="layui-form" id="updateForm" lay-filter="example" style="margin: 1rem">
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品编号</label>
+				<div class="layui-input-block">
+					<input type="text" id="update-productId" name="productId"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品名称</label>
+				<div class="layui-input-block">
+					<input type="text" id="update-productName" name="productName"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品类型</label>
+				<div class="layui-input-block">
+					<select name="productType" id="update-type" lay-filter="type" lay-search="">
+						<option value="">请选择类型</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品价格</label>
+				<div class="layui-input-block">
+					<input type="text" id="update-productPrice" name="productPrice"
+						   autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">状态</label>
+				<div class="layui-input-block">
+					<input type="radio" id="update-productStatus1" name="productStatus"
+						   value="1" title="上架" checked>
+					<input type="radio" id="update-productStatus2" name="productStatus"
+						   value="0" title="下架">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">描述</label>
+				<div class="layui-input-block">
+        		<textarea id="update-productDesc" name="productDesc"
+				  placeholder="请输入内容" class="layui-textarea">
+				</textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!-- 修改表单开始 -->
+
+
 	<!-- 动态数据表格-->
 	<!-- 第一：定义页面结构 -->
 	<table id="table_data" lay-filter="test" style="width: 80%;text-align: center" class="layui-table"></table>
@@ -64,9 +183,17 @@
 				success: function (res) {
 					if (res.code == 200) {
 						$.each(res.data, function (index, obj) {
+							// 填充搜索表单商品类型
 							$('#type').append('<option value="'
 									+ obj.typeName + '">' + obj.typeName + '</option>');
 
+							// 填充修改表单商品类型
+							$('#update-type').append('<option value="'
+									+ obj.typeName + '">' + obj.typeName + '</option>');
+
+							// 填充添加表单商品类型
+							$('#add-type').append('<option value="'
+									+ obj.typeName + '">' + obj.typeName + '</option>');
 						});
 
 						// 重新渲染表单
@@ -187,10 +314,88 @@
 
 
 				} else if(obj.event=='update') {
-					console.log("修改操作")
+					// 第一：获取当前行的数据
+					let p = obj.data ;
+
+					// 第二：弹出修改窗体，并把当前行的数据回显在页面中
+					// 1.把数据设置在修改表单中
+					$("#update-productId").val(p.productId) ;
+					$("#update-productName").val(p.productName) ;
+
+					$("#update-type option").filter(function(){
+						return $(this).text() == p.productType ;
+					}).prop("selected",true) ;
+
+					$("#update-productPrice").val(p.productPrice) ;
+					if(p.productStatus==1) {
+						$("#update-productStatus1").prop("checked",true) ;
+					} else {
+						$("#update-productStatus2").prop("checked",true) ;
+					}
+					$("#update-productDesc").text(p.productDesc) ;
+
+					// 重新渲染表单
+					form.render();
+
+					// 2.弹出窗体
+					layer.open({
+						type:1,
+						title:'修改商品',
+						area:['50%','35em'],
+						resize:false,
+						content:$("#updateContainer"),
+						btn:['修改','取消'],
+						btn1:function( index ) {
+							$.ajax({
+								url:'UpdateProductServlet',
+								method:'post',
+								data:$("#updateForm").serialize(),
+								success:function( res ){
+									// 弹出提示框
+									layer.msg(res.msg)
+									// 根据弹出层的索引，关闭弹出确认框
+									layer.close(index) ;
+
+									if(res.code == 200) {
+										// 重新加载表格数据
+										table.reload('table_data',{page:{curr:1}});
+									}
+								}
+							}) ;
+						}
+					}) ;
 				}
 			});
 
+			// 实现添加商品操作
+			$("#addBtn").click(function (){
+				layer.open({
+					type:1,
+					title:'添加商品',
+					area:['50%','35em'],
+					resize:false,
+					content:$("#addContainer"),
+					btn:['添加','取消'],
+					btn1:function( index ) {
+						$.ajax({
+							url:'InsertProductServlet',
+							method:'post',
+							data:$("#addForm").serialize(),
+							success:function( res ){
+								// 弹出提示框
+								layer.msg(res.msg)
+								// 根据弹出层的索引，关闭弹出确认框
+								layer.close(index) ;
+
+								if(res.code == 200) {
+									// 重新加载表格数据
+									table.reload('table_data',{page:{curr:1}});
+								}
+							}
+						}) ;
+					}
+				}) ;
+			}) ;
 		}) ;
 	</script>
 </body>
